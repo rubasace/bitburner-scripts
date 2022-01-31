@@ -1,7 +1,7 @@
 import {FILES, FLAG_FILE} from "./spread.js";
 
 const filedToClean = FILES.concat(FLAG_FILE)
-const THIS_NAME = 'spread.js'
+const THIS_NAME = 'cleanup.js'
 const sleepSeconds = 1
 
 /** @param {NS} ns **/
