@@ -5,7 +5,7 @@ export async function main(ns) {
 
     if (ns.hasRootAccess(target)) {
         ns.tprint(`Already have root access for ${target}, skipping...`)
-        openBackDoor(ns, target)
+        // openBackDoor(ns, target)
         return
     }
 
@@ -20,21 +20,21 @@ export async function main(ns) {
     try {
         ns.nuke(target)
         ns.tprint(`Succesfully got root access for ${target}`)
-        openBackDoor(ns, target)
+        // openBackDoor(ns, target)
     } catch (e) {
         ns.tprint(`Failed to gain root access for ${target}: ${e.toString()}`)
     }
 }
 
-export function openBackDoor(ns, target) {
-    try {
-        ns.tprint(`Trying to install backdoor in ${target}`)
-        ns.installBackdoor(target)
-        ns.tprint(`Backdoor succesfully installed in ${target}`)
-    } catch (e) {
-        ns.tprint(`Failed to install backdoor in ${target}: ${e.toString()}`)
-    }
-}
+// export function openBackDoor(ns, target) {
+//     try {
+//         ns.tprint(`Trying to install backdoor in ${target}`)
+//         ns.installBackdoor(target)
+//         ns.tprint(`Backdoor succesfully installed in ${target}`)
+//     } catch (e) {
+//         ns.tprint(`Failed to install backdoor in ${target}: ${e.toString()}`)
+//     }
+// }
 
 export async function tryFunction(f, target) {
     try {

@@ -2,9 +2,7 @@ const THIS_NAME = 'spread.js'
 const FILES_ROOT = 'https://raw.githubusercontent.com/rubasace/bitburner-scripts/main/src/'
 const sleepSeconds = 1
 
-
-export const FILES = [THIS_NAME, 'root.js', 'hack.js', 'cleanup.js']
-// export const OWN_SERVERS = ['home', 'nasvigo', 'darkweb']
+export const FILES = [THIS_NAME, 'root.js', 'hack.js', 'cleanup.js', 'do_hack.js']
 export const FLAG_FILE = '.29.txt'
 
 /** @param {NS} ns **/
@@ -29,13 +27,11 @@ export async function main(ns) {
             }
         }
     } catch (e) {
-        ns.print(`An error ocurred while spreading: ${e.toString()}`)
-    } finally {
-        await ns.sleep(10 * 60 * 1000)
+        ns.print(`An error occurred while spreading: ${e.toString()}`)
     }
 }
 
-async function installFiles(ns, server) {
+export async function installFiles(ns, server) {
     for (const file of FILES) {
         await ns.wget(FILES_ROOT + file, file, server)
     }
