@@ -19,8 +19,8 @@ export async function main(ns) {
         for (const [i, targetServer] of reachableServers.entries()) {
             const execThreads = i === 0 ? threadsPerTarget + remainingThreads : threadsPerTarget
             // const pid = ns.exec('root.js', targetServer, 1)
-            if(!ns.isRunning(SCRIPT_NAME, 1, id)){
-                ns.exec(SCRIPT_NAME, targetServer, 1, id)
+            if(!ns.isRunning(SCRIPT_NAME, 1)){
+                ns.exec(SCRIPT_NAME, targetServer, 1)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
         }
