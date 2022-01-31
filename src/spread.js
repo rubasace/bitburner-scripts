@@ -14,8 +14,8 @@ export async function main(ns) {
             ns.tprint(`Skipping ${currentServer}: already infected`)
             return
         }
-        await installFiles(ns)
         ns.tprint(`Spreading from ${currentServer}`)
+        await installFiles(ns)
         await ns.write(FLAG_FILE, id, "w")
         const reachableServers = ns.scan()
         for (let server of reachableServers) {
