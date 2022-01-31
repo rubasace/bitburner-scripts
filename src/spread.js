@@ -28,6 +28,7 @@ export async function main(ns) {
         }
     } catch (e) {
         ns.print(`An error occurred while spreading: ${e.toString()}`)
+        await ns.sleep(10*60*1000)
     }
 }
 
