@@ -15,7 +15,7 @@ export async function main(ns) {
         return
     }
     ns.tprint(`Spreading from ${currentServer}`)
-    ns.write(FLAG_FILE, id, "w")
+    await ns.write(FLAG_FILE, id, "w")
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
         try {
