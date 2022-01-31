@@ -3,7 +3,7 @@ const FILES_ROOT = 'https://raw.githubusercontent.com/rubasace/bitburner-scripts
 const sleepSeconds = 1
 
 
-export const FILES = [THIS_NAME, 'root.js', 'hack.js']
+export const FILES = [THIS_NAME, 'root.js', 'hack.js', 'cleanup.js']
 export const FLAG_FILE = '.29.txt'
 
 /** @param {NS} ns **/
