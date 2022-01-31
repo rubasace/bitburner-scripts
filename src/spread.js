@@ -15,11 +15,11 @@ export async function main(ns) {
             return
         }
         ns.tprint(`Spreading from ${currentServer}`)
+        await installFiles(ns, server)
         await ns.write(FLAG_FILE, id, "w")
         const reachableServers = ns.scan()
         for (let server of reachableServers) {
             try {
-                await installFiles(ns, server)
                 ns.exec(THIS_NAME, server, 1, id)
                 await ns.sleep(sleepSeconds * 1000)
             } catch (e) {

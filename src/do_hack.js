@@ -4,8 +4,8 @@ const TARGET_MONEY = 0.75
 
 /** @param {NS} ns **/
 export async function main(ns) {
-    const target = ns.args[1]
-    const threads = ns.args[2] ? ns.args[2] : 1
+    const target = ns.args[0]
+    const threads = ns.args[1] ? ns.args[1] : 1
 
     const maxMoney = await ns.getServerMaxMoney(target)
     let minSecurityLevel = await ns.getServerMinSecurityLevel(target)

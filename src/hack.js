@@ -1,8 +1,8 @@
+import {FLAG_FILE} from "./spread";
+
 const sleepTime = 1000
 const OWN_SERVERS = ['home', 'nasvigo', 'darkweb']
 const SCRIPT_NAME = 'hack.js'
-const TARGET_SECURITY = 5
-const TARGET_MONEY = 0.75
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -19,10 +19,12 @@ export async function main(ns) {
         for (const [i, targetServer] of reachableServers.entries()) {
             const execThreads = i === 0 ? threadsPerTarget + remainingThreads : threadsPerTarget
             // const pid = ns.exec('root.js', targetServer, 1)
-            ns.exec(SCRIPT_NAME, targetServer, 1)
+            if(!ns.isRunning(SCRIPT_NAME, 1, id)){
+                ns.exec(SCRIPT_NAME, targetServer, 1, id)
+            }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
         }
-        await ns.sleep(1000)
+        await ns.sleep(sleepTime)
     }
 }
 
