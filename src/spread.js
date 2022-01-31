@@ -14,8 +14,8 @@ export async function main(ns) {
             ns.tprint(`Skipping ${currentServer}: already infected`)
             return
         }
+        await installFiles(ns)
         ns.tprint(`Spreading from ${currentServer}`)
-        await installFiles(ns, server)
         await ns.write(FLAG_FILE, id, "w")
         const reachableServers = ns.scan()
         for (let server of reachableServers) {
@@ -31,8 +31,8 @@ export async function main(ns) {
     }
 }
 
-export async function installFiles(ns, server) {
+export async function installFiles(ns) {
     for (const file of FILES) {
-        await ns.wget(FILES_ROOT + file, file, server)
+        await ns.wget(FILES_ROOT + file, file)
     }
 }
