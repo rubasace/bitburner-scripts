@@ -8,8 +8,8 @@ export const FLAG_FILE = '.29.txt'
 
 /** @param {NS} ns **/
 export async function main(ns) {
-    const id = ns.args[0] ? ns.args[0] ? new Date().getTime().toString()
-    if(id===ns.read(FLAG_FILE)){
+    const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
+    if (id === ns.read(FLAG_FILE)) {
         ns.tprint(`Skipping ${currentServer}: already infected`)
         return
     }
