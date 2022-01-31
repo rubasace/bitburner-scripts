@@ -6,9 +6,9 @@ const TARGET_MONEY = 0.75
 
 /** @param {NS} ns **/
 export async function main(ns) {
-
+    const currentServer = ns.getHostname()
     while (true) {
-        const reachableServers = findServers(ns)
+        const reachableServers = findServers(ns, currentServer)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
         const scriptRam = ns.getScriptRam(SCRIPT_NAME)
         const maxScriptsInMemory = Math.floor(availableRam / scriptRam)
@@ -26,8 +26,7 @@ export async function main(ns) {
     }
 }
 
-function findServers(ns) {
-    const currentServer = ns.getHostname()
+function findServers(ns, currentServer) {
     const reachableServers = ns.scan()
         .filter(e => e !== currentServer)
         .filter(e => !OWN_SERVERS.includes(e))
