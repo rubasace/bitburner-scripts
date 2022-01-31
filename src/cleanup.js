@@ -13,7 +13,7 @@ export async function main(ns) {
         try {
             const found = await cleanupFiles(ns, server)
             if (found) {
-                ns.exec(THIS_NAME, server)
+                ns.exec(THIS_NAME, server, 1)
                 await ns.sleep(sleepSeconds * 1000)
             }
         } catch (e) {

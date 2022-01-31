@@ -22,7 +22,7 @@ export async function main(ns) {
         for (let server of reachableServers) {
             try {
                 await installFiles(ns, server)
-                ns.exec(THIS_NAME, server, id)
+                ns.exec(THIS_NAME, server, 1, id)
                 await ns.sleep(sleepSeconds * 1000)
             } catch (e) {
                 ns.tprint(`Error spreading to ${server}: ${e.toString()}`)
