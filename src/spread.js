@@ -19,7 +19,7 @@ export async function main(ns) {
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
         try {
-            await installFiles()
+            await installFiles(ns, server)
             ns.exec(THIS_NAME, server, id)
             await ns.sleep(sleepSeconds * 1000)
         } catch (e) {
