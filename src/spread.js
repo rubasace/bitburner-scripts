@@ -1,33 +1,34 @@
 const THIS_NAME = 'spread.js'
-const SLEEP_TIME = 1*1000
-// const FILES_ROOT =
-const FILES = []
+const FILES_ROOT = 'https://raw.githubusercontent.com/rubasace/bitburner-scripts/main/src/'
+const sleepSeconds = 1
+
+
+export const FILES = [THIS_NAME, 'root.js', 'hack.js']
+export const FLAG_FILE = '.29.txt'
+
 /** @param {NS} ns **/
 export async function main(ns) {
-    const currentServer = ns.getHostname()
-    ns.print(`Spreading from server ${currentServer}`)
+    const id = ns.args[0] ? ns.args[0] ? new Date().getTime().toString()
+    if(id===ns.read(FLAG_FILE)){
+        ns.tprint(`Skipping ${currentServer}: already infected`)
+        return
+    }
+    ns.tprint(`Spreading from ${currentServer}`)
+    ns.write(FLAG_FILE, id, "w")
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
         try {
-            await getFiles()
-            await ns.scp(script, server)
-            await ns.scp(THIS_SCRIPT, server)
-            ns.exec(script, currentServer, 1, server)
-            await ns.sleep(SLEEP_TIME)
-            ns.exec(THIS_SCRIPT, server, 1, script, server)
-            await ns.sleep(SLEEP_TIME)
+            await installFiles()
+            ns.exec(THIS_NAME, server, id)
+            await ns.sleep(sleepSeconds * 1000)
         } catch (e) {
-            ns.tprint(`Error spreading to ${server}, trying next one: ${e.toString()}`)
+            ns.tprint(`Error spreading to ${server}: ${e.toString()}`)
         }
     }
-
-    //ns.tprint(`Finished spreading from server ${currentServer}`)
-    //Done like this so exec fails on second attempts
-    await ns.sleep(5*60*1000)
 }
 
-async function getFiles(){
-    for(const file of FILES){
-        ns.wget()
+async function installFiles(ns, server) {
+    for (const file of FILES) {
+        await ns.wget(FILES_ROOT + file, file, server)
     }
 }
