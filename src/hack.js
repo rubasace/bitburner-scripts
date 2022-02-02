@@ -6,7 +6,7 @@ const THIS_NAME = 'hack.js'
 export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
-    await executeAndWait(ns, 'install.js', currentServer, currentServer, id);
+    // await executeAndWait(ns, 'install.js', currentServer, currentServer, id);
     let reachableServers = findServers(ns, currentServer)
     for(const targetServer of reachableServers){
         ns.exec('install.js', currentServer, 1, targetServer, id)
