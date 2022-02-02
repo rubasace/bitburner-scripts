@@ -1,13 +1,20 @@
 const sleepTime = 1000
 const OWN_SERVERS = ['home', 'nasvigo', 'darkweb']
 const THIS_NAME = 'hack.js'
+const updateMins = 1
+
 /** @param {NS} ns **/
 export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
     let reachableServers = findServers(ns, currentServer)
-    await installOnServers(reachableServers, ns, currentServer);
+    await installOnServers(ns, reachableServers, currentServer);
+    let nextUpdate = getNextInstallTime()
     while (true) {
+        if(new Date().getTime() < nextUpdate){
+            await installOnServers(ns, reachableServers, currentServer)
+            nextUpdate = getNextInstallTime()
+        }
         reachableServers = shuffle(reachableServers)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
         const scriptRam = ns.getScriptRam(THIS_NAME)
@@ -30,7 +37,11 @@ export async function main(ns) {
     }
 }
 
-async function installOnServers(reachableServers, ns, currentServer) {
+function getNextInstallTime(){
+    return new Date().getTime()+updateMins*60*1000;
+}
+
+async function installOnServers(ns, reachableServers, currentServer) {
     for (const targetServer of reachableServers) {
         ns.exec('install.js', currentServer, 1, targetServer)
         await ns.sleep(10 * 1000)
