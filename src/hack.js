@@ -10,6 +10,8 @@ export async function main(ns) {
     let reachableServers = findServers(ns, currentServer)
     for(const targetServer of reachableServers){
         ns.exec('install.js', currentServer, 1, targetServer, id)
+        //We want to wait so we don't run out of RAM
+        await ns.sleep(5*1000)
     }
     while (true) {
         reachableServers = shuffle(reachableServers)
