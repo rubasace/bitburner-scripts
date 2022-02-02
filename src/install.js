@@ -16,6 +16,7 @@ export async function main(ns) {
     ns.tprint(`installing files in ${server}`)
     await ns.write(FLAG_FILE, id, "w")
     for (const file of FILES) {
+        ns.rm(file, server)
         await ns.wget(FILES_ROOT + file, file, server)
     }
 }
