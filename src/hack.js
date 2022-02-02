@@ -1,7 +1,8 @@
 const sleepTime = 1000
 const OWN_SERVERS = ['home', 'nasvigo', 'darkweb']
 const THIS_NAME = 'hack.js'
-const updateMins = 1
+const updateMins = 5
+const installWaitSeconds = 5
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -44,7 +45,7 @@ function getNextInstallTime(){
 async function installOnServers(ns, reachableServers, currentServer) {
     for (const targetServer of reachableServers) {
         ns.exec('install.js', currentServer, 1, targetServer)
-        await ns.sleep(10 * 1000)
+        await ns.sleep(installWaitSeconds * 1000)
     }
 }
 
