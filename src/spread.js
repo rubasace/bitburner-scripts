@@ -17,7 +17,7 @@ export async function main(ns) {
         ns.print(`Skipping ${currentServer}: already infected`)
         return
     }
-    ns.print(`Spreading from ${currentServer}`)
+    ns.tprint(`Spreading from ${currentServer}`)
     await ns.write(FLAG_FILE, id, "w")
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
