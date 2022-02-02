@@ -11,7 +11,7 @@ export async function main(ns) {
     await installOnServers(ns, reachableServers, currentServer);
     let nextUpdate = getNextInstallTime()
     while (true) {
-        if(new Date().getTime() < nextUpdate){
+        if(new Date().getTime() > nextUpdate){
             await installOnServers(ns, reachableServers, currentServer)
             nextUpdate = getNextInstallTime()
         }
