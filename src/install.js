@@ -5,8 +5,9 @@ export const FILES = [THIS_NAME, 'spread.js', 'root.js', 'hack.js', 'cleanup.js'
 
 /** @param {NS} ns **/
 export async function main(ns) {
-    ns.tprint(`installing files in ${ns.getHostname()}`)
+    let currentServer = ns.getHostname();
+    ns.tprint(`installing files in ${currentServer}`)
     for (const file of FILES) {
-        await ns.wget(FILES_ROOT + file, file, server)
+        await ns.wget(FILES_ROOT + file, file, currentServer)
     }
 }
