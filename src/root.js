@@ -40,7 +40,7 @@ export async function tryFunction(ns, f, target) {
         ns.print(`Trying to execute ${f} on ${target}`)
         await f(target)
         ns.print(`Succesfully executed ${f} on ${target}`)
-    } catch {
+    } catch (e) {
         ns.print(`Failed to execute ${f} on ${target}: ${e.toString()}`)
     }
 }
