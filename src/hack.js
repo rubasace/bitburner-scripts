@@ -23,7 +23,7 @@ export async function main(ns) {
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
                 await executeAndWait(ns,'install.js', currentServer, targetServer, id);
-                await ns.sleep(10*1000)
+                await ns.sleep(2*1000)
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)

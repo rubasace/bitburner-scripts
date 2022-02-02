@@ -1,7 +1,7 @@
 const THIS_NAME = 'install.js'
 
 export const FILES_ROOT = 'https://raw.githubusercontent.com/rubasace/bitburner-scripts/main/src/'
-export const FILES = [THIS_NAME, 'spread.js', 'root.js', 'hack.js', 'cleanup.js']
+export const FILES = [THIS_NAME, 'spread.js', 'root.js', 'hack.js', 'do_hack.js', 'cleanup.js']
 
 export const FLAG_FILE = '.29.txt'
 
