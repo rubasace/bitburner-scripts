@@ -22,7 +22,7 @@ export async function main(ns) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
-                await executeAndWait(ns,'install.js', currentServer, targetServer);
+                await executeAndWait(ns,'install.js', currentServer, targetServer, id);
                 await ns.sleep(10*1000)
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
