@@ -10,11 +10,11 @@ export async function main(ns) {
 
     ns.print(`Forcing root access for ${target}`)
 
-    await tryFunction(ns.brutessh, target)
-    await tryFunction(ns.ftpcrack, target)
-    await tryFunction(ns.relaysmtp, target)
-    await tryFunction(ns.httpworm, target)
-    await tryFunction(ns.sqlinject, target)
+    await tryFunction(ns, ns.brutessh, target)
+    await tryFunction(ns, ns.ftpcrack, target)
+    await tryFunction(ns, ns.relaysmtp, target)
+    await tryFunction(ns, ns.httpworm, target)
+    await tryFunction(ns, ns.sqlinject, target)
 
     try {
         ns.nuke(target)
@@ -35,7 +35,7 @@ export async function main(ns) {
 //     }
 // }
 
-export async function tryFunction(f, target) {
+export async function tryFunction(ns, f, target) {
     try {
         ns.print(`Trying to execute ${f} on ${target}`)
         await f(target)
