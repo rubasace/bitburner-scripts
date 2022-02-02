@@ -8,7 +8,7 @@ const installWaitSeconds = 5
 export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
-    let reachableServers = findServers(ns, currentServer)
+    let reachableServers = findServers(ns)
     await installOnServers(ns, reachableServers, currentServer);
     let nextUpdate = getNextInstallTime()
     while (true) {
@@ -16,7 +16,7 @@ export async function main(ns) {
             await installOnServers(ns, reachableServers, currentServer)
             nextUpdate = getNextInstallTime()
         }
-        reachableServers = shuffle(reachableServers)
+        reachableServers = findServers(ns)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
         const scriptRam = ns.getScriptRam(THIS_NAME)
         const maxScriptsInMemory = Math.floor(availableRam / scriptRam)
@@ -56,9 +56,8 @@ async function executeAndWait(ns, script, server, ...args) {
     }
 }
 
-function findServers(ns, currentServer) {
+function findServers(ns) {
     const reachableServers = ns.scan()
-        .filter(e => e !== currentServer)
         .filter(e => !OWN_SERVERS.includes(e))
         // .filter(hasLevel)
     return shuffle(reachableServers);
