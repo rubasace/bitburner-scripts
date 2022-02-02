@@ -41,8 +41,7 @@ function findServers(ns, currentServer) {
     const reachableServers = ns.scan()
         .filter(e => e !== currentServer)
         .filter(e => !OWN_SERVERS.includes(e))
-        .filter(ns.hasRootAccess)
-        .filter(hasLevel)
+        // .filter(hasLevel)
     return shuffle(reachableServers);
 }
 
