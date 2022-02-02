@@ -4,6 +4,7 @@ const TARGET_MONEY = 0.75
 
 /** @param {NS} ns **/
 export async function main(ns) {
+    try {
         const target = ns.args[0]
         const threads = ns.args[1] ? ns.args[1] : 1
 
@@ -19,4 +20,8 @@ export async function main(ns) {
             await ns.hack(target, {threads})
         }
         await ns.sleep(sleepTime)
+    } catch (e) {
+        ns.print(`Couldn't hack: ${e.toString()}`)
+    }
+
 }
