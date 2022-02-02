@@ -14,10 +14,10 @@ export async function main(ns) {
         await installFiles(ns, currentServer)
     }
     if (id === ns.read(FLAG_FILE)) {
-        ns.tprint(`Skipping ${currentServer}: already infected`)
+        ns.print(`Skipping ${currentServer}: already infected`)
         return
     }
-    ns.tprint(`Spreading from ${currentServer}`)
+    ns.print(`Spreading from ${currentServer}`)
     await ns.write(FLAG_FILE, id, "w")
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
@@ -26,7 +26,7 @@ export async function main(ns) {
             ns.exec(THIS_NAME, server, 1, id)
             await ns.sleep(sleepSeconds * 1000)
         } catch (e) {
-            ns.tprint(`Error spreading to ${server}: ${e.toString()}`)
+            ns.print(`Error spreading to ${server}: ${e.toString()}`)
         }
     }
 }

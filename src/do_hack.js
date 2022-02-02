@@ -21,7 +21,7 @@ export async function main(ns) {
         }
         await ns.sleep(sleepTime)
     } catch (e) {
-        ns.tprint(`Couldn't hack: ${e.toString()}`)
+        ns.print(`Couldn't hack: ${e.toString()}`)
         await ns.sleep(1 * 60 * 1000)
 
     }

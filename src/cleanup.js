@@ -7,7 +7,7 @@ const sleepSeconds = 1
 /** @param {NS} ns **/
 export async function main(ns) {
     const currentServer = ns.getHostname()
-    ns.tprint(`Cleaning traces from ${currentServer}`)
+    ns.print(`Cleaning traces from ${currentServer}`)
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
         try {
@@ -17,7 +17,7 @@ export async function main(ns) {
                 await ns.sleep(sleepSeconds * 1000)
             }
         } catch (e) {
-            ns.tprint(`Error spreading to ${server}: ${e.toString()}`)
+            ns.print(`Error spreading to ${server}: ${e.toString()}`)
         }
     }
 }
@@ -25,7 +25,7 @@ export async function main(ns) {
 async function cleanupFiles(ns, server) {
     let found = false
     for (const file of filedToClean) {
-        ns.tprint(`Deleting ${file} from  ${server}`)
+        ns.print(`Deleting ${file} from  ${server}`)
         if (await ns.rm(file, server)) {
             found = true
         }
