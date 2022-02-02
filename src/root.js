@@ -19,7 +19,7 @@ export async function main(ns) {
 
     try {
         ns.nuke(target)
-        ns.print(`Succesfully got root access for ${target}`)
+        ns.tprint(`Succesfully got root access for ${target}`)
         // openBackDoor(ns, target)
     } catch (e) {
         ns.print(`Failed to gain root access for ${target}: ${e.toString()}`)

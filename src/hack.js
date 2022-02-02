@@ -4,8 +4,9 @@ const THIS_NAME = 'hack.js'
 
 /** @param {NS} ns **/
 export async function main(ns) {
+    const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
-    await executeAndWait(ns, 'spread.js', currentServer);
+    await executeAndWait(ns, 'spread.js', currentServer, id);
     while (true) {
         const reachableServers = findServers(ns, currentServer)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
@@ -21,7 +22,7 @@ export async function main(ns) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1)) {
-                ns.exec(THIS_NAME, targetServer, 1)
+                ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
         }
