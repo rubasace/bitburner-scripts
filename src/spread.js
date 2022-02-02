@@ -1,5 +1,6 @@
 const THIS_NAME = 'spread.js'
 const sleepSeconds = 1
+const sleepTime = sleepSeconds * 1000
 
 export const FLAG_FILE = '.29.txt'
 
@@ -22,7 +23,7 @@ export async function main(ns) {
         try {
             executeAndWait(ns, 'install.js', currentServer, server)
             ns.exec(THIS_NAME, server, 1, id)
-            await ns.sleep(sleepSeconds * 1000)
+            await ns.sleep(sleepTime)
         } catch (e) {
             ns.print(`Error spreading to ${server}: ${e.toString()}`)
         }
