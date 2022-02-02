@@ -1,13 +1,14 @@
 const sleepTime = 1000
 const OWN_SERVERS = ['home', 'nasvigo', 'darkweb']
 const THIS_NAME = 'hack.js'
-
 /** @param {NS} ns **/
 export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
+    let reachableServers = findServers(ns, currentServer)
+    await installOnServers(reachableServers, ns, currentServer, id);
     while (true) {
-        const reachableServers = findServers(ns, currentServer)
+        reachableServers = shuffle(reachableServers)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
         const scriptRam = ns.getScriptRam(THIS_NAME)
         const maxScriptsInMemory = Math.floor(availableRam / scriptRam)
@@ -16,7 +17,6 @@ export async function main(ns) {
         const remainingThreads = Math.max(0, Math.floor(maxScriptsInMemory - threadsPerTarget * reachableServers.length))
         ns.print(`Reachable servers: ${reachableServers}\nThreads per server: ${threadsPerTarget}\nRemaining threads: ${remainingThreads}`)
         for (const [i, targetServer] of reachableServers.entries()) {
-            ns.exec('install.js', currentServer, 1, targetServer, id)
             const execThreads = i === 0 ? threadsPerTarget + remainingThreads : threadsPerTarget
             if (!ns.hasRootAccess(targetServer)) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
@@ -27,6 +27,13 @@ export async function main(ns) {
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
         }
         await ns.sleep(sleepTime)
+    }
+}
+
+async function installOnServers(reachableServers, ns, currentServer, id) {
+    for (const targetServer of reachableServers) {
+        ns.exec('install.js', currentServer, 1, targetServer, id)
+        await ns.sleep(10 * 1000)
     }
 }
 
