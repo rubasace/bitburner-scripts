@@ -6,8 +6,7 @@ const THIS_NAME = 'hack.js'
 export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
-    await executeAndWait(ns, 'spread.js', currentServer, id);
-    await ns.sleep(10*1000)
+    // await executeAndWait(ns, 'install.js', currentServer, id);
     while (true) {
         const reachableServers = findServers(ns, currentServer)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
@@ -23,6 +22,8 @@ export async function main(ns) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
+                await executeAndWait(ns,'install.js', currentServer, targetServer);
+                await ns.sleep(10*1000)
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
