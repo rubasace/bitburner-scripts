@@ -5,7 +5,7 @@ const THIS_NAME = 'hack.js'
 /** @param {NS} ns **/
 export async function main(ns) {
     const currentServer = ns.getHostname()
-
+    await executeAndWait('spread.js', currentServer);
     while (true) {
         const reachableServers = findServers(ns, currentServer)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
@@ -17,9 +17,8 @@ export async function main(ns) {
         ns.print(`Reachable servers: ${reachableServers}\nThreads per server: ${threadsPerTarget}\nRemaining threads: ${remainingThreads}`)
         for (const [i, targetServer] of reachableServers.entries()) {
             const execThreads = i === 0 ? threadsPerTarget + remainingThreads : threadsPerTarget
-            if (!ns.hasRootAccess(targetServer)){
+            if (!ns.hasRootAccess(targetServer)) {
                 await executeAndWait('root.js', currentServer, targetServer);
-                await executeAndWait('spread.js', targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1)) {
                 ns.exec(THIS_NAME, targetServer, 1)
