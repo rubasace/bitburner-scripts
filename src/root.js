@@ -1,4 +1,3 @@
-const WAIT_MINS = 1
 /** @param {NS} ns **/
 export async function main(ns) {
     const target = ns.args[0]

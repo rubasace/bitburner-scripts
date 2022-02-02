@@ -1,16 +1,12 @@
 const THIS_NAME = 'install.js'
-const sleepSeconds = 1
-
 
 export const FILES_ROOT = 'https://raw.githubusercontent.com/rubasace/bitburner-scripts/main/src/'
-export const FILES = [THIS_NAME, 'root.js', 'hack.js', 'cleanup.js']
+export const FILES = [THIS_NAME, 'spread.js', 'root.js', 'hack.js', 'cleanup.js']
 
 /** @param {NS} ns **/
 export async function main(ns) {
-
-    await ns.wget(FILES_ROOT + THIS_NAME, file, server)
-}
-
-async function installFiles(ns, server) {
-
+    ns.tprint(`installing files in ${ns.getHostName()}`)
+    for (const file of FILES) {
+        await ns.wget(FILES_ROOT + file, file, server)
+    }
 }

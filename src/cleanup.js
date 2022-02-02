@@ -1,4 +1,5 @@
-import {FILES, FLAG_FILE} from "./spread.js";
+import {FLAG_FILE} from "./spread.js";
+import {FILES} from "./install.js";
 
 const filedToClean = FILES.concat(FLAG_FILE)
 const THIS_NAME = 'cleanup.js'
