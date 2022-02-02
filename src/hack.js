@@ -7,8 +7,12 @@ export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
     await executeAndWait(ns, 'install.js', currentServer, currentServer, id);
+    let reachableServers = findServers(ns, currentServer)
+    for(const targetServer of reachableServers){
+        ns.exec('install.js', currentServer, 1, targetServer, id)
+    }
     while (true) {
-        const reachableServers = findServers(ns, currentServer)
+        reachableServers = shuffle(reachableServers)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
         const scriptRam = ns.getScriptRam(THIS_NAME)
         const maxScriptsInMemory = Math.floor(availableRam / scriptRam)
@@ -40,11 +44,10 @@ async function executeAndWait(ns, script, server, ...args) {
 }
 
 function findServers(ns, currentServer) {
-    const reachableServers = ns.scan()
+    return ns.scan()
         .filter(e => e !== currentServer)
         .filter(e => !OWN_SERVERS.includes(e))
         // .filter(hasLevel)
-    return shuffle(reachableServers);
 }
 
 function shuffle(array) {
