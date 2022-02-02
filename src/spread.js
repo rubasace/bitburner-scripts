@@ -17,7 +17,7 @@ export async function main(ns) {
     const reachableServers = ns.scan()
     for (let server of reachableServers) {
         try {
-            executeAndWait(ns, 'install.js', currentServer, server)
+            executeAndWait(ns, 'install.js', currentServer, server, id)
             ns.exec(THIS_NAME, server, 1, id)
             await ns.sleep(sleepTime)
         } catch (e) {

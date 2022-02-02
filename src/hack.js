@@ -6,15 +6,9 @@ const THIS_NAME = 'hack.js'
 export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
-    // await executeAndWait(ns, 'install.js', currentServer, currentServer, id);
-    let reachableServers = findServers(ns, currentServer)
-    for(const targetServer of reachableServers){
-        ns.exec('install.js', currentServer, 1, targetServer, id)
-        //We want to wait so we don't run out of RAM
-        await ns.sleep(5*1000)
-    }
+    ns.exec('spread.js', currentServer, 1, id)
     while (true) {
-        reachableServers = shuffle(reachableServers)
+        const reachableServers = findServers(ns, currentServer)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
         const scriptRam = ns.getScriptRam(THIS_NAME)
         const maxScriptsInMemory = Math.floor(availableRam / scriptRam)
@@ -28,8 +22,8 @@ export async function main(ns) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
-                ns.exec('install.js', currentServer, 1, targetServer, id)
-                await ns.sleep(5*1000)
+                ns.exec('spread.js', currentServer, 1, id)
+                await ns.sleep(2*1000)
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
@@ -46,10 +40,11 @@ async function executeAndWait(ns, script, server, ...args) {
 }
 
 function findServers(ns, currentServer) {
-    return ns.scan()
+    const reachableServers = ns.scan()
         .filter(e => e !== currentServer)
         .filter(e => !OWN_SERVERS.includes(e))
         // .filter(hasLevel)
+    return shuffle(reachableServers);
 }
 
 function shuffle(array) {
