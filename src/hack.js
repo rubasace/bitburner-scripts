@@ -21,7 +21,7 @@ export async function main(ns) {
             if (!ns.hasRootAccess(targetServer)) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
             }
-            if (!ns.isRunning(THIS_NAME, targetServer, 1)) {
+            if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
