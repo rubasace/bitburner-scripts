@@ -6,7 +6,7 @@ export async function main(ns) {
     const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
     const currentServer = ns.getHostname()
     let reachableServers = findServers(ns, currentServer)
-    await installOnServers(reachableServers, ns, currentServer, id);
+    await installOnServers(reachableServers, ns, currentServer);
     while (true) {
         reachableServers = shuffle(reachableServers)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
@@ -30,9 +30,9 @@ export async function main(ns) {
     }
 }
 
-async function installOnServers(reachableServers, ns, currentServer, id) {
+async function installOnServers(reachableServers, ns, currentServer) {
     for (const targetServer of reachableServers) {
-        ns.exec('install.js', currentServer, 1, targetServer, id)
+        ns.exec('install.js', currentServer, 1, targetServer)
         await ns.sleep(10 * 1000)
     }
 }
