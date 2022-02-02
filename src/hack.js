@@ -1,14 +1,15 @@
 const sleepTime = 1000
 const OWN_SERVERS = ['home', 'nasvigo', 'darkweb']
-const SCRIPT_NAME = 'hack.js'
+const THIS_NAME = 'hack.js'
 
 /** @param {NS} ns **/
 export async function main(ns) {
     const currentServer = ns.getHostname()
+
     while (true) {
         const reachableServers = findServers(ns, currentServer)
         const availableRam = ns.getServerMaxRam(currentServer) - ns.getServerUsedRam(currentServer)
-        const scriptRam = ns.getScriptRam(SCRIPT_NAME)
+        const scriptRam = ns.getScriptRam(THIS_NAME)
         const maxScriptsInMemory = Math.floor(availableRam / scriptRam)
         ns.print(`Available RAM: ${availableRam}\nScript RAM: ${scriptRam}\nMax number of runs with available RAM: ${maxScriptsInMemory}`)
         const threadsPerTarget = Math.max(1, Math.floor(maxScriptsInMemory / reachableServers.length))
@@ -16,12 +17,22 @@ export async function main(ns) {
         ns.print(`Reachable servers: ${reachableServers}\nThreads per server: ${threadsPerTarget}\nRemaining threads: ${remainingThreads}`)
         for (const [i, targetServer] of reachableServers.entries()) {
             const execThreads = i === 0 ? threadsPerTarget + remainingThreads : threadsPerTarget
-            // const pid = ns.exec('root.js', targetServer, 1)
-            if (!ns.isRunning(SCRIPT_NAME, targetServer, 1)) {
-                ns.exec(SCRIPT_NAME, targetServer, 1)
+            if (!ns.hasRootAccess(targetServer)){
+                await executeAndWait('root.js', currentServer, targetServer);
+                await executeAndWait('spread.js', targetServer);
+            }
+            if (!ns.isRunning(THIS_NAME, targetServer, 1)) {
+                ns.exec(THIS_NAME, targetServer, 1)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
         }
+        await ns.sleep(sleepTime)
+    }
+}
+
+async function executeAndWait(script, server, ...args) {
+    const pid = ns.exec(script, server, 1, args)
+    while (ns.isRunning(pid)) {
         await ns.sleep(sleepTime)
     }
 }
@@ -49,8 +60,9 @@ function shuffle(array) {
     return array;
 }
 
-export async function hasLevel(ns, target) {
+async function hasLevel(ns, target) {
     const requiredLevel = await ns.getServerRequiredHackingLevel(target)
     const currentLevel = ns.getHackingLevel()
     return currentLevel >= requiredLevel
 }
+
