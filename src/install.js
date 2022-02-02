@@ -10,7 +10,7 @@ export async function main(ns) {
     let server = ns.args[0] ? ns.args[0] : ns.getHostname();
     const id = ns.args[1] ? ns.args[1] : new Date().getTime().toString()
     if (id === ns.read(FLAG_FILE)) {
-        ns.print(`Skipping ${currentServer}: already installed`)
+        ns.print(`Skipping ${server}: already installed`)
         return
     }
     ns.tprint(`installing files in ${server}`)
