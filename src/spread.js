@@ -6,31 +6,23 @@ export const FLAG_FILE = '.29.txt'
 
 /** @param {NS} ns **/
 export async function main(ns) {
-    try {
-        const currentServer = ns.getHostname()
-        const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
-        //Update files in home
-        if (!ns.args[0]) {
-            executeAndWait(ns, 'install.js', currentServer)
+    const currentServer = ns.getHostname()
+    const id = ns.args[0] ? ns.args[0] : new Date().getTime().toString()
+    if (id === ns.read(FLAG_FILE)) {
+        ns.print(`Skipping ${currentServer}: already infected`)
+        return
+    }
+    ns.tprint(`Spreading from ${currentServer}`)
+    await ns.write(FLAG_FILE, id, "w")
+    const reachableServers = ns.scan()
+    for (let server of reachableServers) {
+        try {
+            executeAndWait(ns, 'install.js', currentServer, server)
+            ns.exec(THIS_NAME, server, 1, id)
+            await ns.sleep(sleepTime)
+        } catch (e) {
+            ns.print(`Error spreading to ${server}: ${e.toString()}`)
         }
-        if (id === ns.read(FLAG_FILE)) {
-            ns.print(`Skipping ${currentServer}: already infected`)
-            return
-        }
-        ns.tprint(`Spreading from ${currentServer}`)
-        await ns.write(FLAG_FILE, id, "w")
-        const reachableServers = ns.scan()
-        for (let server of reachableServers) {
-            try {
-                executeAndWait(ns, 'install.js', currentServer, server)
-                ns.exec(THIS_NAME, server, 1, id)
-                await ns.sleep(sleepTime)
-            } catch (e) {
-                ns.print(`Error spreading to ${server}: ${e.toString()}`)
-            }
-        }
-    } catch (e) {
-        ns.print(e.toString())
     }
 }
 
