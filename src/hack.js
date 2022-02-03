@@ -59,7 +59,11 @@ async function executeAndWait(ns, script, server, ...args) {
 function findServers(ns, currentServer) {
     const reachableServers = ns.scan()
         .filter(e => !OWN_SERVERS.includes(e))
-    reachableServers.push(currentServer)
+        //We don't want to infect our own servers
+        .filter(e => !e.startsWith('cluster'))
+    if('home'!==currentServer){
+        reachableServers.push(currentServer)
+    }
         // .filter(hasLevel)
     return shuffle(reachableServers);
 }
