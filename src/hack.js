@@ -12,7 +12,7 @@ export async function main(ns) {
     await installOnServers(ns, reachableServers, currentServer);
     let nextUpdate = getNextInstallTime()
     while (true) {
-        if(new Date().getTime() > nextUpdate){
+        if (new Date().getTime() > nextUpdate) {
             await installOnServers(ns, reachableServers, currentServer)
             nextUpdate = getNextInstallTime()
         }
@@ -27,10 +27,12 @@ export async function main(ns) {
         for (const [i, targetServer] of reachableServers.entries()) {
             const execThreads = i === 0 ? threadsPerTarget + remainingThreads : threadsPerTarget
             if (!ns.hasRootAccess(targetServer)) {
-                await executeAndWait(ns,'root.js', currentServer, targetServer);
+                await executeAndWait(ns, 'root.js', currentServer, targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
-                ns.killall(targetServer)
+                if (targetServer !== currentServer) {
+                    ns.killall(targetServer)
+                }
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
@@ -39,8 +41,8 @@ export async function main(ns) {
     }
 }
 
-function getNextInstallTime(){
-    return new Date().getTime()+updateMins*60*1000;
+function getNextInstallTime() {
+    return new Date().getTime() + updateMins * 60 * 1000;
 }
 
 async function installOnServers(ns, reachableServers, currentServer) {
@@ -62,10 +64,10 @@ function findServers(ns, currentServer) {
         .filter(e => !OWN_SERVERS.includes(e))
         //We don't want to infect our own servers
         .filter(e => !e.startsWith('cluster'))
-    if('home'!==currentServer){
+    if ('home' !== currentServer) {
         reachableServers.push(currentServer)
     }
-        // .filter(hasLevel)
+    // .filter(hasLevel)
     return shuffle(reachableServers);
 }
 
