@@ -30,6 +30,7 @@ export async function main(ns) {
                 await executeAndWait(ns,'root.js', currentServer, targetServer);
             }
             if (!ns.isRunning(THIS_NAME, targetServer, 1, id)) {
+                ns.killall(targetServer)
                 ns.exec(THIS_NAME, targetServer, 1, id)
             }
             ns.exec('do_hack.js', currentServer, execThreads, targetServer, execThreads)
